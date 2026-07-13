@@ -1,0 +1,47 @@
+{
+  "name": "C3_matmul_qdq_stack",
+  "dir": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-static-matmul",
+  "fp32": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-fp32-encoder/encoder-model.onnx",
+  "output": "/home/azureuser/latest_llm_eval/models/_quant_work/encoder-C3_matmul_qdq_stack.onnx",
+  "quant_format": "QDQ",
+  "per_channel": false,
+  "calibrate_method": "MinMax",
+  "activation_type": "QUInt8",
+  "weight_type": "QInt8",
+  "op_types_to_quantize": [
+    "MatMul",
+    "Gemm"
+  ],
+  "n_calib": 4,
+  "preprocess_ok": false,
+  "preprocess_error": "Failed to serialize proto | retry: Failed to serialize proto",
+  "quantize_ok": true,
+  "quantize_s": 13.19,
+  "out_mb": 1.64,
+  "out_files": [
+    {
+      "name": "encoder-C3_matmul_qdq_stack.onnx.data",
+      "mb": 878.35
+    },
+    {
+      "name": "encoder-C3_matmul_qdq_stack.onnx",
+      "mb": 1.64
+    }
+  ],
+  "smoke_ok": true,
+  "smoke": {
+    "ok": true,
+    "out_shape": [
+      1,
+      1024,
+      63
+    ],
+    "encoded_lengths": [
+      63
+    ],
+    "inputs": [
+      "audio_signal",
+      "length"
+    ]
+  }
+}

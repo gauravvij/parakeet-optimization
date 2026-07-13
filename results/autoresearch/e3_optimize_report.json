@@ -1,0 +1,23 @@
+{
+  "dst": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-opt",
+  "files": {
+    "nemo128.onnx": {
+      "status": "ok",
+      "seconds": 0.002,
+      "src_mb": 0.14,
+      "dst_mb": 0.14
+    },
+    "encoder-model.int8.onnx": {
+      "status": "ok",
+      "seconds": 5.589,
+      "src_mb": 652.18,
+      "dst_mb": 651.62
+    },
+    "decoder_joint-model.int8.onnx": {
+      "status": "ok",
+      "seconds": 0.046,
+      "src_mb": 18.2,
+      "dst_mb": 18.2
+    }
+  }
+}

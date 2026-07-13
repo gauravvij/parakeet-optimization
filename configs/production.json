@@ -1,0 +1,52 @@
+{
+  "model_path": "models/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc",
+  "quantization": "int8",
+  "provider": "CPUExecutionProvider",
+  "provider_options": null,
+  "intra_op_num_threads": 8,
+  "inter_op_num_threads": 1,
+  "graph_optimization_level": "ORT_ENABLE_ALL",
+  "enable_mem_pattern": true,
+  "enable_cpu_mem_arena": true,
+  "execution_mode": "ORT_SEQUENTIAL",
+  "env": {
+    "OMP_NUM_THREADS": "8",
+    "OMP_WAIT_POLICY": "PASSIVE"
+  },
+  "chunking": null,
+  "optimized_model_dir": null,
+  "model_id": "nemo-parakeet-tdt-0.6b-v3",
+  "c0_primary_rtf": 0.038742,
+  "best_primary_rtf": 0.017692,
+  "improvement_pct_vs_c0": 54.334,
+  "kept_experiments": [
+    "C1_minmax_qdq",
+    "C2_minmax_qdq_pc",
+    "C3_matmul_qdq_stack"
+  ],
+  "baseline_real_speech_transcript": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+  "host_snapshot": {
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_count_logical": 8,
+    "onnxruntime": "1.27.0"
+  },
+  "ladder": "encoder_static_quant_C0_C3",
+  "generated_utc": "2026-07-13T15:17:10.797619+00:00",
+  "role": "production_default_alias",
+  "production_frozen": true,
+  "production_frozen_utc": "2026-07-13T16:19:40.751476+00:00",
+  "quality_assessment": {
+    "report_json": "results/quality_baseline_vs_best.json",
+    "report_md": "results/quality_baseline_vs_best.md",
+    "recommendation": "FREEZE_PRODUCTION",
+    "primary_rtf_baseline_remeasured": 0.038156,
+    "primary_rtf_best_remeasured": 0.018432,
+    "improvement_pct_remeasured": 51.693,
+    "mean_pairwise_wer": 0.086946,
+    "exact_match_clips": "3/5",
+    "absolute_jfk_wer_baseline": 0.0,
+    "absolute_jfk_wer_best": 0.0
+  },
+  "alias_of": "configs/best_config.json",
+  "notes": "Alias of best_config.json (static QDQ per-channel encoder). Prefer best_config.json or this file for production."
+}

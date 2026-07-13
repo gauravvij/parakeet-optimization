@@ -1,0 +1,44 @@
+{
+  "name": "C2_minmax_qdq_pc",
+  "dir": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc",
+  "fp32": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-fp32-encoder/encoder-model.onnx",
+  "output": "/home/azureuser/latest_llm_eval/models/_quant_work/encoder-C2_minmax_qdq_pc.onnx",
+  "quant_format": "QDQ",
+  "per_channel": true,
+  "calibrate_method": "MinMax",
+  "activation_type": "QUInt8",
+  "weight_type": "QInt8",
+  "op_types_to_quantize": null,
+  "n_calib": 4,
+  "preprocess_ok": false,
+  "preprocess_error": "Failed to serialize proto | retry: Failed to serialize proto",
+  "quantize_ok": true,
+  "quantize_s": 55.32,
+  "out_mb": 4.76,
+  "out_files": [
+    {
+      "name": "encoder-C2_minmax_qdq_pc.onnx",
+      "mb": 4.76
+    },
+    {
+      "name": "encoder-C2_minmax_qdq_pc.onnx.data",
+      "mb": 650.46
+    }
+  ],
+  "smoke_ok": true,
+  "smoke": {
+    "ok": true,
+    "out_shape": [
+      1,
+      1024,
+      63
+    ],
+    "encoded_lengths": [
+      63
+    ],
+    "inputs": [
+      "audio_signal",
+      "length"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "encoder": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-fp32-encoder/encoder-model.onnx",
+  "inputs": {
+    "audio_signal": {
+      "shape": [
+        "audio_signal_dynamic_axes_1",
+        128,
+        "audio_signal_dynamic_axes_2"
+      ],
+      "type": "tensor(float)"
+    },
+    "length": {
+      "shape": [
+        "length_dynamic_axes_1"
+      ],
+      "type": "tensor(int64)"
+    }
+  },
+  "outputs": {
+    "outputs": {
+      "shape": [
+        "Transposeoutputs_dim_0",
+        1024,
+        "Transposeoutputs_dim_2"
+      ],
+      "type": "tensor(float)"
+    },
+    "encoded_lengths": {
+      "shape": [
+        "length_dynamic_axes_1"
+      ],
+      "type": "tensor(int64)"
+    }
+  },
+  "sample_mel_shape": [
+    1,
+    128,
+    501
+  ],
+  "sample_enc_out_shape": [
+    1,
+    1024,
+    63
+  ],
+  "sample_encoded_lengths": [
+    63
+  ]
+}

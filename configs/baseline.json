@@ -1,0 +1,21 @@
+{
+  "model_path": "models/parakeet-tdt-0.6b-v3-onnx",
+  "quantization": "int8",
+  "provider": "CPUExecutionProvider",
+  "provider_options": null,
+  "intra_op_num_threads": 8,
+  "inter_op_num_threads": 1,
+  "graph_optimization_level": "ORT_ENABLE_ALL",
+  "enable_mem_pattern": true,
+  "enable_cpu_mem_arena": true,
+  "execution_mode": "ORT_SEQUENTIAL",
+  "env": {
+    "OMP_NUM_THREADS": "8",
+    "OMP_WAIT_POLICY": "PASSIVE"
+  },
+  "chunking": null,
+  "optimized_model_dir": null,
+  "model_id": "nemo-parakeet-tdt-0.6b-v3",
+  "role": "hub_dynamic_int8_reference",
+  "notes": "Hub/default shipped dynamic INT8 pack (istupakov). Use for A/B vs production static encoder."
+}

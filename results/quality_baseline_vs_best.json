@@ -1,0 +1,395 @@
+{
+  "generated_utc": "2026-07-13T16:18:26.095396+00:00",
+  "host": {
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_count_logical": 8
+  },
+  "protocol": {
+    "warmup": 1,
+    "repeats": 3,
+    "primary_keys": [
+      "medium_15s",
+      "long_30s"
+    ],
+    "normalization": "lowercase, strip punctuation, collapse whitespace, expand common contractions",
+    "jfk_reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country."
+  },
+  "eval_notes": [
+    "Eval set is small and mostly English clean speech.",
+    "short_5s / medium_15s / long_30s are typically looped variants of the same JFK phrase; real_speech.wav and jfk.flac are the natural JFK inaugural line.",
+    "This is NOT a full multilingual WER suite; pairwise vs baseline + absolute JFK only.",
+    "No extra public speech samples downloaded (disk/time careful; optional)."
+  ],
+  "baseline": {
+    "label": "baseline",
+    "config_path": "configs/baseline.json",
+    "model_path": "models/parakeet-tdt-0.6b-v3-onnx",
+    "resolved_model_dir": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx",
+    "session": {
+      "intra_op_num_threads": 8,
+      "inter_op_num_threads": 1,
+      "graph_optimization_level": "ORT_ENABLE_ALL",
+      "enable_mem_pattern": true,
+      "enable_cpu_mem_arena": true,
+      "execution_mode": "ORT_SEQUENTIAL",
+      "env": {
+        "OMP_NUM_THREADS": "8",
+        "OMP_WAIT_POLICY": "PASSIVE"
+      },
+      "provider": "CPUExecutionProvider",
+      "quantization": "int8"
+    },
+    "primary_rtf": 0.038156,
+    "primary_keys": [
+      "medium_15s",
+      "long_30s"
+    ],
+    "clips": {
+      "short_5s": {
+        "audio_file": "short_5s.wav",
+        "audio_duration_s": 5.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.24973,
+          0.26003,
+          0.252897
+        ],
+        "latency_mean_s": 0.254219,
+        "latency_std_s": 0.004308,
+        "rtf": 0.050844,
+        "rtfx": 19.6681,
+        "transcript": "And so, my fellow Americans, ask not",
+        "transcript_nonempty": true
+      },
+      "medium_15s": {
+        "audio_file": "medium_15s.wav",
+        "audio_duration_s": 15.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.578633,
+          0.585158,
+          0.579176
+        ],
+        "latency_mean_s": 0.580989,
+        "latency_std_s": 0.002956,
+        "rtf": 0.038733,
+        "rtfx": 25.818,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so, my fellow Americans, ask.",
+        "transcript_nonempty": true
+      },
+      "long_30s": {
+        "audio_file": "long_30s.wav",
+        "audio_duration_s": 30.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          1.127737,
+          1.128066,
+          1.127096
+        ],
+        "latency_mean_s": 1.127633,
+        "latency_std_s": 0.000403,
+        "rtf": 0.037588,
+        "rtfx": 26.6044,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so, my fellow Americans, ask not what your country can do for you,",
+        "transcript_nonempty": true
+      },
+      "real_speech": {
+        "audio_file": "real_speech.wav",
+        "audio_duration_s": 11.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.481838,
+          0.48558,
+          0.478494
+        ],
+        "latency_mean_s": 0.48197,
+        "latency_std_s": 0.002894,
+        "rtf": 0.043815,
+        "rtfx": 22.823,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+        "transcript_nonempty": true
+      },
+      "jfk": {
+        "audio_file": "jfk.flac",
+        "audio_duration_s": 11.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.511154,
+          0.494557,
+          0.48671
+        ],
+        "latency_mean_s": 0.497474,
+        "latency_std_s": 0.01019,
+        "rtf": 0.045225,
+        "rtfx": 22.1117,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+        "transcript_nonempty": true
+      }
+    }
+  },
+  "best": {
+    "label": "best",
+    "config_path": "configs/best_config.json",
+    "model_path": "models/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc",
+    "resolved_model_dir": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc",
+    "session": {
+      "intra_op_num_threads": 8,
+      "inter_op_num_threads": 1,
+      "graph_optimization_level": "ORT_ENABLE_ALL",
+      "enable_mem_pattern": true,
+      "enable_cpu_mem_arena": true,
+      "execution_mode": "ORT_SEQUENTIAL",
+      "env": {
+        "OMP_NUM_THREADS": "8",
+        "OMP_WAIT_POLICY": "PASSIVE"
+      },
+      "provider": "CPUExecutionProvider",
+      "quantization": "int8"
+    },
+    "primary_rtf": 0.018432,
+    "primary_keys": [
+      "medium_15s",
+      "long_30s"
+    ],
+    "clips": {
+      "short_5s": {
+        "audio_file": "short_5s.wav",
+        "audio_duration_s": 5.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.184904,
+          0.17838,
+          0.194782
+        ],
+        "latency_mean_s": 0.186022,
+        "latency_std_s": 0.006743,
+        "rtf": 0.037204,
+        "rtfx": 26.8786,
+        "transcript": "And so, my fellow Americans, ask not",
+        "transcript_nonempty": true
+      },
+      "medium_15s": {
+        "audio_file": "medium_15s.wav",
+        "audio_duration_s": 15.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.303947,
+          0.305403,
+          0.321261
+        ],
+        "latency_mean_s": 0.310204,
+        "latency_std_s": 0.007841,
+        "rtf": 0.02068,
+        "rtfx": 48.3553,
+        "transcript": "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so my fellow Americans, asking for the",
+        "transcript_nonempty": true
+      },
+      "long_30s": {
+        "audio_file": "long_30s.wav",
+        "audio_duration_s": 30.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.493192,
+          0.491368,
+          0.494088
+        ],
+        "latency_mean_s": 0.492883,
+        "latency_std_s": 0.001132,
+        "rtf": 0.016429,
+        "rtfx": 60.8664,
+        "transcript": "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so my fellow Americans, ask not what your country can do for you, ask what you",
+        "transcript_nonempty": true
+      },
+      "real_speech": {
+        "audio_file": "real_speech.wav",
+        "audio_duration_s": 11.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.230073,
+          0.226616,
+          0.225144
+        ],
+        "latency_mean_s": 0.227278,
+        "latency_std_s": 0.002066,
+        "rtf": 0.020662,
+        "rtfx": 48.3989,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+        "transcript_nonempty": true
+      },
+      "jfk": {
+        "audio_file": "jfk.flac",
+        "audio_duration_s": 11.0,
+        "warmup": 1,
+        "repeats": 3,
+        "latencies_s": [
+          0.273342,
+          0.273027,
+          0.296713
+        ],
+        "latency_mean_s": 0.281027,
+        "latency_std_s": 0.011092,
+        "rtf": 0.025548,
+        "rtfx": 39.1421,
+        "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+        "transcript_nonempty": true
+      }
+    }
+  },
+  "pairwise": {
+    "short_5s": {
+      "exact_match_norm": true,
+      "token_f1": 1.0,
+      "similarity": 1.0,
+      "wer_vs_baseline": 0.0,
+      "cer_vs_baseline": 0.0,
+      "baseline_norm": "and so my fellow americans ask not",
+      "best_norm": "and so my fellow americans ask not"
+    },
+    "medium_15s": {
+      "exact_match_norm": false,
+      "token_f1": 0.931034,
+      "similarity": 0.960854,
+      "wer_vs_baseline": 0.107143,
+      "cer_vs_baseline": 0.081481,
+      "baseline_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country and so my fellow americans ask",
+      "best_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country and so my fellow americans asking for the"
+    },
+    "long_30s": {
+      "exact_match_norm": false,
+      "token_f1": 0.804124,
+      "similarity": 0.800866,
+      "wer_vs_baseline": 0.327586,
+      "cer_vs_baseline": 0.33213,
+      "baseline_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country and so my fellow americans ask not what your country can do for you ask what you can do for your country and so my fellow americans ask not what your country can do for you",
+      "best_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country and so my fellow americans ask not what your country can do for you ask what you"
+    },
+    "real_speech": {
+      "exact_match_norm": true,
+      "token_f1": 1.0,
+      "similarity": 1.0,
+      "wer_vs_baseline": 0.0,
+      "cer_vs_baseline": 0.0,
+      "baseline_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "best_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country"
+    },
+    "jfk": {
+      "exact_match_norm": true,
+      "token_f1": 1.0,
+      "similarity": 1.0,
+      "wer_vs_baseline": 0.0,
+      "cer_vs_baseline": 0.0,
+      "baseline_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "best_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country"
+    }
+  },
+  "absolute_jfk": {
+    "baseline": {
+      "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+      "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "hypothesis": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+      "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "exact_match_norm": true,
+      "token_f1": 1.0,
+      "similarity": 1.0,
+      "wer": 0.0,
+      "cer": 0.0,
+      "nonempty": true,
+      "clip": "real_speech"
+    },
+    "best": {
+      "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+      "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "hypothesis": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+      "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+      "exact_match_norm": true,
+      "token_f1": 1.0,
+      "similarity": 1.0,
+      "wer": 0.0,
+      "cer": 0.0,
+      "nonempty": true,
+      "clip": "real_speech"
+    }
+  },
+  "absolute_jfk_per_clip": {
+    "real_speech": {
+      "baseline": {
+        "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+        "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "hypothesis": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+        "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "exact_match_norm": true,
+        "token_f1": 1.0,
+        "similarity": 1.0,
+        "wer": 0.0,
+        "cer": 0.0,
+        "nonempty": true
+      },
+      "best": {
+        "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+        "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "hypothesis": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+        "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "exact_match_norm": true,
+        "token_f1": 1.0,
+        "similarity": 1.0,
+        "wer": 0.0,
+        "cer": 0.0,
+        "nonempty": true
+      }
+    },
+    "jfk": {
+      "baseline": {
+        "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+        "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "hypothesis": "And so, my fellow Americans, ask not what your country can do for you. Ask what you can do for your country.",
+        "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "exact_match_norm": true,
+        "token_f1": 1.0,
+        "similarity": 1.0,
+        "wer": 0.0,
+        "cer": 0.0,
+        "nonempty": true
+      },
+      "best": {
+        "reference": "And so, my fellow Americans, ask not what your country can do for you — ask what you can do for your country.",
+        "reference_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "hypothesis": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+        "hypothesis_norm": "and so my fellow americans ask not what your country can do for you ask what you can do for your country",
+        "exact_match_norm": true,
+        "token_f1": 1.0,
+        "similarity": 1.0,
+        "wer": 0.0,
+        "cer": 0.0,
+        "nonempty": true
+      }
+    }
+  },
+  "decision": {
+    "recommendation": "FREEZE_PRODUCTION",
+    "freeze": true,
+    "pass_flags": {
+      "no_empty_real_speech": true,
+      "pairwise_quality": true,
+      "absolute_jfk": true,
+      "rtf_improvement": true
+    },
+    "mean_pairwise_wer": 0.086946,
+    "n_exact_match": 3,
+    "n_clips": 5,
+    "improvement_pct_primary_rtf": 51.693,
+    "reasons": [
+      "pairwise quality OK: mean_wer=0.0869, exact=3/5, near_exact(<=5% WER)=3/5",
+      "absolute JFK WER OK: baseline=0.0000 best=0.0000",
+      "primary RTF improvement OK: 51.693% (baseline=0.038156 best=0.018432)"
+    ]
+  }
+}

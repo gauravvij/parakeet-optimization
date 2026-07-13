@@ -1,0 +1,31 @@
+# Python / venv
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Large model weights (download from Hub — see models/README.md)
+models/**/*.onnx
+models/**/*.onnx.data
+models/**/*.data
+models/**/.cache/
+models/_quant_work/
+
+# Local scratch / private samples
+.tmp/
+sample-0.wav
+*.wav.bak
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets (never commit)
+.env
+.env.*
+!.env.example

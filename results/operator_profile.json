@@ -1,0 +1,847 @@
+{
+  "host": {
+    "platform": "Linux-6.17.0-1018-azure-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "cpu_count_logical": 8,
+    "onnxruntime": "1.27.0",
+    "providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "timestamp_utc": "2026-07-13T08:11:54.623845+00:00",
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_flags_relevant": [
+      "avx",
+      "avx2",
+      "avx512_bf16",
+      "avx512_vnni",
+      "avx512bf16",
+      "avx512bw",
+      "avx512dq",
+      "avx512f",
+      "avx512vl",
+      "avx512vnni"
+    ],
+    "ram_total_gb": 62.79,
+    "ram_available_gb": 59.06
+  },
+  "model": {
+    "id": "nemo-parakeet-tdt-0.6b-v3",
+    "quantization": "int8",
+    "path": "/home/azureuser/latest_llm_eval/models/parakeet-tdt-0.6b-v3-onnx"
+  },
+  "stage_breakdown": {
+    "audio_key": "medium_15s",
+    "audio_file": "medium_15s.wav",
+    "audio_duration_s": 15.0,
+    "threads": 4,
+    "warmup": 1,
+    "repeats": 3,
+    "transcript": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country. And so, my fellow Americans, ask.",
+    "stages": {
+      "frontend_mel_s": 0.008704,
+      "encoder_s": 0.751728,
+      "decoder_tdt_s": 0.008596,
+      "sum_stages_s": 0.769028,
+      "e2e_instrumented_s": 0.76903,
+      "frontend_pct": 1.13,
+      "encoder_pct": 97.75,
+      "decoder_pct": 1.12
+    },
+    "shapes": {
+      "features": [
+        1,
+        128,
+        1501
+      ],
+      "features_lens": 1501,
+      "encoder_out": [
+        1,
+        1024,
+        188
+      ],
+      "encoder_lens": 188,
+      "encoder_frames_T": 188,
+      "encoder_dim": 1024,
+      "subsampling_factor": 8,
+      "approx_feature_frames": 1501
+    },
+    "rtf_stages": {
+      "frontend": 0.00058,
+      "encoder": 0.050115,
+      "decoder": 0.000573,
+      "total": 0.051269
+    },
+    "peak_rss_mb": 2194.99
+  },
+  "stage_breakdown_short": {
+    "audio_key": "short_5s",
+    "audio_file": "short_5s.wav",
+    "audio_duration_s": 5.0,
+    "threads": 4,
+    "warmup": 1,
+    "repeats": 3,
+    "transcript": "And so, my fellow Americans, ask not",
+    "stages": {
+      "frontend_mel_s": 0.007387,
+      "encoder_s": 0.277946,
+      "decoder_tdt_s": 0.003207,
+      "sum_stages_s": 0.28854,
+      "e2e_instrumented_s": 0.288541,
+      "frontend_pct": 2.56,
+      "encoder_pct": 96.33,
+      "decoder_pct": 1.11
+    },
+    "shapes": {
+      "features": [
+        1,
+        128,
+        501
+      ],
+      "features_lens": 501,
+      "encoder_out": [
+        1,
+        1024,
+        63
+      ],
+      "encoder_lens": 63,
+      "encoder_frames_T": 63,
+      "encoder_dim": 1024,
+      "subsampling_factor": 8,
+      "approx_feature_frames": 501
+    },
+    "rtf_stages": {
+      "frontend": 0.001477,
+      "encoder": 0.055589,
+      "decoder": 0.000641,
+      "total": 0.057708
+    },
+    "peak_rss_mb": 2194.99
+  },
+  "operator_profile": {
+    "audio_key": "medium_15s",
+    "audio_duration_s": 15.0,
+    "threads": 4,
+    "decoder_profiled_steps": 64,
+    "encoder_frames": 188,
+    "profile_files": {
+      "frontend": "/home/azureuser/latest_llm_eval/results/ort_profiles/fe_2026-07-13_08-11-44_416.json",
+      "encoder": "/home/azureuser/latest_llm_eval/results/ort_profiles/enc_2026-07-13_08-11-44_418.json",
+      "decoder": "/home/azureuser/latest_llm_eval/results/ort_profiles/dec_2026-07-13_08-11-45_607.json"
+    },
+    "frontend_top_ops": [
+      {
+        "op_name": "model_run",
+        "count": 2,
+        "total_us": 29097.0,
+        "total_ms": 29.097,
+        "mean_us": 14548.5,
+        "max_us": 14614.0,
+        "sample_names": [
+          "model_run"
+        ],
+        "pct": 32.88
+      },
+      {
+        "op_name": "SequentialExecutor::Execute",
+        "count": 2,
+        "total_us": 28979.0,
+        "total_ms": 28.979,
+        "mean_us": 14489.5,
+        "max_us": 14516.0,
+        "sample_names": [
+          "SequentialExecutor::Execute"
+        ],
+        "pct": 32.74
+      },
+      {
+        "op_name": "STFT",
+        "count": 2,
+        "total_us": 24923.0,
+        "total_ms": 24.923,
+        "mean_us": 12461.5,
+        "max_us": 12544.0,
+        "sample_names": [
+          "n13_2_kernel_time"
+        ],
+        "pct": 28.16
+      },
+      {
+        "op_name": "session_initialization",
+        "count": 1,
+        "total_us": 1227.0,
+        "total_ms": 1.227,
+        "mean_us": 1227.0,
+        "max_us": 1227.0,
+        "sample_names": [
+          "session_initialization"
+        ],
+        "pct": 1.39
+      },
+      {
+        "op_name": "ReduceSumSquare",
+        "count": 4,
+        "total_us": 706.0,
+        "total_ms": 0.706,
+        "mean_us": 176.5,
+        "max_us": 312.0,
+        "sample_names": [
+          "n14_2_kernel_time",
+          "n20_2_kernel_time"
+        ],
+        "pct": 0.8
+      },
+      {
+        "op_name": "Where",
+        "count": 6,
+        "total_us": 692.0,
+        "total_ms": 0.692,
+        "mean_us": 115.33,
+        "max_us": 172.0,
+        "sample_names": [
+          "n12_3_kernel_time",
+          "n19_2_kernel_time",
+          "n33_kernel_time"
+        ],
+        "pct": 0.78
+      },
+      {
+        "op_name": "Slice",
+        "count": 6,
+        "total_us": 633.0,
+        "total_ms": 0.633,
+        "mean_us": 105.5,
+        "max_us": 474.0,
+        "sample_names": [
+          "n4_2_n10_kernel_time",
+          "n4_2_n2_2_kernel_time",
+          "n4_2_n5_kernel_time"
+        ],
+        "pct": 0.72
+      },
+      {
+        "op_name": "MatMul",
+        "count": 2,
+        "total_us": 473.0,
+        "total_ms": 0.473,
+        "mean_us": 236.5,
+        "max_us": 246.0,
+        "sample_names": [
+          "n16_kernel_time"
+        ],
+        "pct": 0.53
+      },
+      {
+        "op_name": "model_loading_uri",
+        "count": 1,
+        "total_us": 447.0,
+        "total_ms": 0.447,
+        "mean_us": 447.0,
+        "max_us": 447.0,
+        "sample_names": [
+          "model_loading_uri"
+        ],
+        "pct": 0.51
+      },
+      {
+        "op_name": "Cast",
+        "count": 6,
+        "total_us": 343.0,
+        "total_ms": 0.343,
+        "mean_us": 57.17,
+        "max_us": 128.0,
+        "sample_names": [
+          "node_Cast_18_kernel_time",
+          "node_Cast_6_kernel_time",
+          "node_Cast_7_kernel_time"
+        ],
+        "pct": 0.39
+      },
+      {
+        "op_name": "Pad",
+        "count": 2,
+        "total_us": 193.0,
+        "total_ms": 0.193,
+        "mean_us": 96.5,
+        "max_us": 98.0,
+        "sample_names": [
+          "n6_2_kernel_time"
+        ],
+        "pct": 0.22
+      },
+      {
+        "op_name": "Log",
+        "count": 2,
+        "total_us": 174.0,
+        "total_ms": 0.174,
+        "mean_us": 87.0,
+        "max_us": 88.0,
+        "sample_names": [
+          "n20_kernel_time"
+        ],
+        "pct": 0.2
+      },
+      {
+        "op_name": "Mul",
+        "count": 2,
+        "total_us": 124.0,
+        "total_ms": 0.124,
+        "mean_us": 62.0,
+        "max_us": 69.0,
+        "sample_names": [
+          "n4_2_n12_kernel_time"
+        ],
+        "pct": 0.14
+      },
+      {
+        "op_name": "Sub",
+        "count": 6,
+        "total_us": 103.0,
+        "total_ms": 0.103,
+        "mean_us": 17.17,
+        "max_us": 30.0,
+        "sample_names": [
+          "n16_2_kernel_time",
+          "n23_2_kernel_time",
+          "n4_2_n13_kernel_time"
+        ],
+        "pct": 0.12
+      },
+      {
+        "op_name": "Div",
+        "count": 8,
+        "total_us": 99.0,
+        "total_ms": 0.099,
+        "mean_us": 12.38,
+        "max_us": 26.0,
+        "sample_names": [
+          "n15_2_kernel_time",
+          "n23_kernel_time",
+          "n24_2_kernel_time",
+          "n30_kernel_time"
+        ],
+        "pct": 0.11
+      }
+    ],
+    "encoder_top_ops": [
+      {
+        "op_name": "model_run",
+        "count": 2,
+        "total_us": 1429506.0,
+        "total_ms": 1429.506,
+        "mean_us": 714753.0,
+        "max_us": 715394.0,
+        "sample_names": [
+          "model_run"
+        ],
+        "pct": 26.18
+      },
+      {
+        "op_name": "SequentialExecutor::Execute",
+        "count": 2,
+        "total_us": 1428388.0,
+        "total_ms": 1428.388,
+        "mean_us": 714194.0,
+        "max_us": 714926.0,
+        "sample_names": [
+          "SequentialExecutor::Execute"
+        ],
+        "pct": 26.16
+      },
+      {
+        "op_name": "session_initialization",
+        "count": 1,
+        "total_us": 1090615.0,
+        "total_ms": 1090.615,
+        "mean_us": 1090615.0,
+        "max_us": 1090615.0,
+        "sample_names": [
+          "session_initialization"
+        ],
+        "pct": 19.97
+      },
+      {
+        "op_name": "ConvInteger",
+        "count": 154,
+        "total_us": 572631.0,
+        "total_ms": 572.631,
+        "mean_us": 3718.38,
+        "max_us": 14775.0,
+        "sample_names": [
+          "/pre_encode/conv/conv.0/Conv_quant_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_quant_kernel_time",
+          "/pre_encode/conv/conv.3/Conv_quant_kernel_time",
+          "/pre_encode/conv/conv.5/Conv_quant_kernel_time",
+          "/pre_encode/conv/conv.6/Conv_quant_kernel_time"
+        ],
+        "pct": 10.49
+      },
+      {
+        "op_name": "DynamicQuantizeMatMul",
+        "count": 242,
+        "total_us": 489031.0,
+        "total_ms": 489.031,
+        "mean_us": 2020.79,
+        "max_us": 2412.0,
+        "sample_names": [
+          "/layers.0/feed_forward1/linear1/MatMul_quant_kernel_time",
+          "/layers.0/feed_forward1/linear2/MatMul_quant_kernel_time",
+          "/layers.0/feed_forward2/linear1/MatMul_quant_kernel_time",
+          "/layers.0/self_attn/linear_out/MatMul_quant_kernel_time",
+          "/pre_encode/out/MatMul_quant_kernel_time"
+        ],
+        "pct": 8.96
+      },
+      {
+        "op_name": "MatMulIntegerToFloat",
+        "count": 192,
+        "total_us": 145891.0,
+        "total_ms": 145.891,
+        "mean_us": 759.85,
+        "max_us": 1254.0,
+        "sample_names": [
+          "/layers.0/self_attn/linear_k/MatMul_quant_kernel_time",
+          "/layers.0/self_attn/linear_pos/MatMul_quant_kernel_time",
+          "/layers.0/self_attn/linear_q/MatMul_quant_kernel_time",
+          "/layers.0/self_attn/linear_v/MatMul_quant_kernel_time",
+          "/layers.1/self_attn/linear_q/MatMul_quant_kernel_time"
+        ],
+        "pct": 2.67
+      },
+      {
+        "op_name": "model_loading_uri",
+        "count": 1,
+        "total_us": 98267.0,
+        "total_ms": 98.267,
+        "mean_us": 98267.0,
+        "max_us": 98267.0,
+        "sample_names": [
+          "model_loading_uri"
+        ],
+        "pct": 1.8
+      },
+      {
+        "op_name": "LayerNormalization",
+        "count": 192,
+        "total_us": 47120.0,
+        "total_ms": 47.12,
+        "mean_us": 245.42,
+        "max_us": 259.0,
+        "sample_names": [
+          "/layers.0/norm_conv/LayerNormalization_kernel_time",
+          "/layers.0/norm_feed_forward1/LayerNormalization_kernel_time",
+          "/layers.0/norm_feed_forward2/LayerNormalization_kernel_time",
+          "/layers.0/norm_self_att/LayerNormalization_kernel_time",
+          "/layers.1/norm_feed_forward1/LayerNormalization_kernel_time"
+        ],
+        "pct": 0.86
+      },
+      {
+        "op_name": "MatMul",
+        "count": 144,
+        "total_us": 34127.0,
+        "total_ms": 34.127,
+        "mean_us": 236.99,
+        "max_us": 405.0,
+        "sample_names": [
+          "/layers.0/self_attn/MatMul_1_kernel_time",
+          "/layers.0/self_attn/MatMul_2_kernel_time",
+          "/layers.0/self_attn/MatMul_kernel_time",
+          "/layers.1/self_attn/MatMul_1_kernel_time",
+          "/layers.1/self_attn/MatMul_kernel_time"
+        ],
+        "pct": 0.62
+      },
+      {
+        "op_name": "Cast",
+        "count": 162,
+        "total_us": 19739.0,
+        "total_ms": 19.739,
+        "mean_us": 121.85,
+        "max_us": 3939.0,
+        "sample_names": [
+          "/pre_encode/conv/conv.0/Conv_output_0_output_quantized_cast_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_output_0_output_quantized_cast_kernel_time",
+          "/pre_encode/conv/conv.3/Conv_output_0_output_quantized_cast_kernel_time",
+          "/pre_encode/conv/conv.5/Conv_output_0_output_quantized_cast_kernel_time",
+          "/pre_encode/conv/conv.6/Conv_output_0_output_quantized_cast_kernel_time"
+        ],
+        "pct": 0.36
+      },
+      {
+        "op_name": "Where",
+        "count": 146,
+        "total_us": 19158.0,
+        "total_ms": 19.158,
+        "mean_us": 131.22,
+        "max_us": 169.0,
+        "sample_names": [
+          "/Where_kernel_time",
+          "/layers.0/conv/Where_kernel_time",
+          "/layers.0/self_attn/Where_1_kernel_time",
+          "/layers.0/self_attn/Where_kernel_time",
+          "/layers.1/self_attn/Where_kernel_time"
+        ],
+        "pct": 0.35
+      },
+      {
+        "op_name": "Transpose",
+        "count": 392,
+        "total_us": 16719.0,
+        "total_ms": 16.719,
+        "mean_us": 42.65,
+        "max_us": 264.0,
+        "sample_names": [
+          "/Transpose_kernel_time",
+          "/layers.0/self_attn/Transpose_1_kernel_time",
+          "/layers.0/self_attn/Transpose_2_kernel_time",
+          "/layers.0/self_attn/Transpose_3_kernel_time",
+          "/pre_encode/Transpose_kernel_time"
+        ],
+        "pct": 0.31
+      },
+      {
+        "op_name": "Mul",
+        "count": 452,
+        "total_us": 12304.0,
+        "total_ms": 12.304,
+        "mean_us": 27.22,
+        "max_us": 2304.0,
+        "sample_names": [
+          "/pre_encode/conv/conv.0/Conv_quant_output_scale_mul_kernel_time",
+          "/pre_encode/conv/conv.0/Conv_quant_scales_mul_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_quant_output_scale_mul_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_quant_scales_mul_kernel_time",
+          "/pre_encode/conv/conv.3/Conv_quant_scales_mul_kernel_time"
+        ],
+        "pct": 0.23
+      },
+      {
+        "op_name": "Add",
+        "count": 360,
+        "total_us": 11727.0,
+        "total_ms": 11.727,
+        "mean_us": 32.58,
+        "max_us": 1862.0,
+        "sample_names": [
+          "/pre_encode/conv/conv.0/Conv_output_0_bias_add_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_output_0_bias_add_kernel_time",
+          "/pre_encode/conv/conv.3/Conv_output_0_bias_add_kernel_time",
+          "/pre_encode/conv/conv.5/Conv_output_0_bias_add_kernel_time",
+          "/pre_encode/conv/conv.6/Conv_output_0_bias_add_kernel_time"
+        ],
+        "pct": 0.21
+      },
+      {
+        "op_name": "DynamicQuantizeLinear",
+        "count": 204,
+        "total_us": 7820.0,
+        "total_ms": 7.82,
+        "mean_us": 38.33,
+        "max_us": 1738.0,
+        "sample_names": [
+          "/pre_encode/Unsqueeze_output_0_QuantizeLinear_kernel_time",
+          "/pre_encode/conv/conv.1/Relu_output_0_QuantizeLinear_kernel_time",
+          "/pre_encode/conv/conv.1_1/Relu_output_0_QuantizeLinear_kernel_time",
+          "/pre_encode/conv/conv.2/Conv_output_0_QuantizeLinear_kernel_time",
+          "/pre_encode/conv/conv.5/Conv_output_0_QuantizeLinear_kernel_time"
+        ],
+        "pct": 0.14
+      }
+    ],
+    "decoder_top_ops": [
+      {
+        "op_name": "model_run",
+        "count": 64,
+        "total_us": 14001.0,
+        "total_ms": 14.001,
+        "mean_us": 218.77,
+        "max_us": 652.0,
+        "sample_names": [
+          "model_run"
+        ],
+        "pct": 27.22
+      },
+      {
+        "op_name": "SequentialExecutor::Execute",
+        "count": 64,
+        "total_us": 13646.0,
+        "total_ms": 13.646,
+        "mean_us": 213.22,
+        "max_us": 632.0,
+        "sample_names": [
+          "SequentialExecutor::Execute"
+        ],
+        "pct": 26.53
+      },
+      {
+        "op_name": "session_initialization",
+        "count": 1,
+        "total_us": 8858.0,
+        "total_ms": 8.858,
+        "mean_us": 8858.0,
+        "max_us": 8858.0,
+        "sample_names": [
+          "session_initialization"
+        ],
+        "pct": 17.22
+      },
+      {
+        "op_name": "model_loading_uri",
+        "count": 1,
+        "total_us": 4148.0,
+        "total_ms": 4.148,
+        "mean_us": 4148.0,
+        "max_us": 4148.0,
+        "sample_names": [
+          "model_loading_uri"
+        ],
+        "pct": 8.07
+      },
+      {
+        "op_name": "DynamicQuantizeLSTM",
+        "count": 128,
+        "total_us": 4033.0,
+        "total_ms": 4.033,
+        "mean_us": 31.51,
+        "max_us": 175.0,
+        "sample_names": [
+          "/decoder/dec_rnn/lstm/LSTM_1_quant_kernel_time",
+          "/decoder/dec_rnn/lstm/LSTM_quant_kernel_time"
+        ],
+        "pct": 7.84
+      },
+      {
+        "op_name": "DynamicQuantizeMatMul",
+        "count": 192,
+        "total_us": 3361.0,
+        "total_ms": 3.361,
+        "mean_us": 17.51,
+        "max_us": 138.0,
+        "sample_names": [
+          "/joint/enc/MatMul_quant_kernel_time",
+          "/joint/joint_net/joint_net.2/MatMul_quant_kernel_time",
+          "/joint/pred/MatMul_quant_kernel_time"
+        ],
+        "pct": 6.54
+      },
+      {
+        "op_name": "Split",
+        "count": 128,
+        "total_us": 519.0,
+        "total_ms": 0.519,
+        "mean_us": 4.05,
+        "max_us": 24.0,
+        "sample_names": [
+          "/decoder/dec_rnn/lstm/Slice_2/GatherSliceToSplitFusion_kernel_time",
+          "/decoder/dec_rnn/lstm/Slice_3/GatherSliceToSplitFusion_kernel_time"
+        ],
+        "pct": 1.01
+      },
+      {
+        "op_name": "Transpose",
+        "count": 192,
+        "total_us": 507.0,
+        "total_ms": 0.507,
+        "mean_us": 2.64,
+        "max_us": 4.0,
+        "sample_names": [
+          "/decoder/Transpose_kernel_time",
+          "/joint/Transpose_1_kernel_time",
+          "/joint/Transpose_kernel_time"
+        ],
+        "pct": 0.99
+      },
+      {
+        "op_name": "Concat",
+        "count": 128,
+        "total_us": 471.0,
+        "total_ms": 0.471,
+        "mean_us": 3.68,
+        "max_us": 15.0,
+        "sample_names": [
+          "/decoder/dec_rnn/lstm/Concat_1_kernel_time",
+          "/decoder/dec_rnn/lstm/Concat_kernel_time"
+        ],
+        "pct": 0.92
+      },
+      {
+        "op_name": "Squeeze",
+        "count": 128,
+        "total_us": 396.0,
+        "total_ms": 0.396,
+        "mean_us": 3.09,
+        "max_us": 7.0,
+        "sample_names": [
+          "/decoder/dec_rnn/lstm/Squeeze_1_kernel_time",
+          "/decoder/dec_rnn/lstm/Squeeze_kernel_time"
+        ],
+        "pct": 0.77
+      },
+      {
+        "op_name": "Unsqueeze",
+        "count": 128,
+        "total_us": 384.0,
+        "total_ms": 0.384,
+        "mean_us": 3.0,
+        "max_us": 6.0,
+        "sample_names": [
+          "/joint/Unsqueeze_1_kernel_time",
+          "/joint/Unsqueeze_kernel_time"
+        ],
+        "pct": 0.75
+      },
+      {
+        "op_name": "Add",
+        "count": 64,
+        "total_us": 220.0,
+        "total_ms": 0.22,
+        "mean_us": 3.44,
+        "max_us": 15.0,
+        "sample_names": [
+          "/joint/Add_kernel_time"
+        ],
+        "pct": 0.43
+      },
+      {
+        "op_name": "DequantizeLinear",
+        "count": 64,
+        "total_us": 213.0,
+        "total_ms": 0.213,
+        "mean_us": 3.33,
+        "max_us": 14.0,
+        "sample_names": [
+          "/decoder/Transpose_output_0_DequantizeLinear_kernel_time"
+        ],
+        "pct": 0.41
+      },
+      {
+        "op_name": "Gather",
+        "count": 64,
+        "total_us": 203.0,
+        "total_ms": 0.203,
+        "mean_us": 3.17,
+        "max_us": 5.0,
+        "sample_names": [
+          "/decoder/embed/Gather_kernel_time"
+        ],
+        "pct": 0.39
+      },
+      {
+        "op_name": "Relu",
+        "count": 64,
+        "total_us": 165.0,
+        "total_ms": 0.165,
+        "mean_us": 2.58,
+        "max_us": 4.0,
+        "sample_names": [
+          "/joint/joint_net/joint_net.0/Relu_kernel_time"
+        ],
+        "pct": 0.32
+      }
+    ],
+    "frontend_op_classes": {
+      "other": {
+        "total_ms": 85.772,
+        "pct": 96.91,
+        "count": 26
+      },
+      "layout_memory": {
+        "total_ms": 1.135,
+        "pct": 1.28,
+        "count": 20
+      },
+      "reduction": {
+        "total_ms": 0.736,
+        "pct": 0.83,
+        "count": 6
+      },
+      "matmul_gemm": {
+        "total_ms": 0.473,
+        "pct": 0.53,
+        "count": 2
+      },
+      "elementwise_activation": {
+        "total_ms": 0.389,
+        "pct": 0.44,
+        "count": 22
+      }
+    },
+    "encoder_op_classes": {
+      "other": {
+        "total_ms": 4080.857,
+        "pct": 74.73,
+        "count": 674
+      },
+      "matmul_gemm": {
+        "total_ms": 669.049,
+        "pct": 12.25,
+        "count": 578
+      },
+      "convolution": {
+        "total_ms": 572.631,
+        "pct": 10.49,
+        "count": 154
+      },
+      "layout_memory": {
+        "total_ms": 51.065,
+        "pct": 0.94,
+        "count": 2004
+      },
+      "normalization": {
+        "total_ms": 50.03,
+        "pct": 0.92,
+        "count": 240
+      },
+      "elementwise_activation": {
+        "total_ms": 35.229,
+        "pct": 0.65,
+        "count": 1068
+      },
+      "softmax_attention": {
+        "total_ms": 1.944,
+        "pct": 0.04,
+        "count": 48
+      }
+    },
+    "decoder_op_classes": {
+      "other": {
+        "total_ms": 41.014,
+        "pct": 79.75,
+        "count": 258
+      },
+      "recurrent": {
+        "total_ms": 4.033,
+        "pct": 7.84,
+        "count": 128
+      },
+      "matmul_gemm": {
+        "total_ms": 3.361,
+        "pct": 6.54,
+        "count": 192
+      },
+      "layout_memory": {
+        "total_ms": 2.634,
+        "pct": 5.12,
+        "count": 832
+      },
+      "elementwise_activation": {
+        "total_ms": 0.385,
+        "pct": 0.75,
+        "count": 128
+      }
+    },
+    "architecture_mapping_notes": {
+      "frontend_nemo128": "Mel spectrogram / STFT + log-mel filterbank (128 bins) ONNX preprocessor",
+      "encoder_fastconformer": "8x conv subsampling + stacked FastConformer blocks (MHSA, depthwise conv, FFN); INT8 MatMul/Conv dominate",
+      "decoder_tdt": "Prediction LSTM (2x640) + joiner FFN; serial token/duration steps with frame skip"
+    }
+  },
+  "hotspot_summary": {
+    "primary_bottleneck": "encoder",
+    "encoder_pct": 97.75,
+    "decoder_pct": 1.12,
+    "frontend_pct": 1.13,
+    "notes": "FastConformer encoder (INT8 MatMul/Conv + attention) typically dominates; TDT decoder is serial over encoder frames with duration-based skipping."
+  }
+}

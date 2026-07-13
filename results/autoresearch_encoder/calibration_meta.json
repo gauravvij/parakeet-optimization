@@ -1,0 +1,37 @@
+{
+  "n": 4,
+  "samples": [
+    {
+      "source": "real_speech.wav",
+      "mel_shape": [
+        1,
+        128,
+        1101
+      ]
+    },
+    {
+      "source": "short_5s.wav",
+      "mel_shape": [
+        1,
+        128,
+        501
+      ]
+    },
+    {
+      "source": "medium_15s.wav",
+      "mel_shape": [
+        1,
+        128,
+        1501
+      ]
+    },
+    {
+      "source": "long_30s.wav",
+      "mel_shape": [
+        1,
+        128,
+        2001
+      ]
+    }
+  ]
+}
