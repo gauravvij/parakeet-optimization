@@ -1,5 +1,12 @@
 # Parakeet TDT 0.6B v3 — CPU Optimization
 
+[![Made using NEO](https://img.shields.io/badge/Made%20using-NEO-0A0A0A?style=for-the-badge&labelColor=111111&color=00E5C0)](https://heyneo.com)
+
+**[Made using NEO](https://heyneo.com)**  
+Autonomous AI Engineering Agent
+
+![Parakeet CPU optimization at a glance](blog/assets/tweet_hero_stats.jpg)
+
 Portable **CPU-only** optimization notes and tooling for
 [`nvidia/parakeet-tdt-0.6b-v3`](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3)
 via community INT8 ONNX + ONNX Runtime.

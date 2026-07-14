@@ -1,4 +1,4 @@
-![Header: CPU ASR optimization case study](assets/header.png)
+![Parakeet CPU optimization: ~2.1x lower primary RTF](assets/tweet_hero_stats.jpg)
 
 # Making Parakeet faster on CPU
 
