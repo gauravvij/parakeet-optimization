@@ -4,7 +4,14 @@ Portable **CPU-only** optimization notes and tooling for
 [`nvidia/parakeet-tdt-0.6b-v3`](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3)
 via community INT8 ONNX + ONNX Runtime.
 
-**Headline (AMD EPYC 9V74, 8 vCPU):** static QDQ per-channel **encoder** cut primary RTF by **~52%** vs Hub dynamic INT8 (~26× → ~54× real-time), with quality gates passing on a small English eval set.
+**Headline:** static QDQ per-channel **encoder** beats Hub dynamic INT8 on **more than one CPU family** (same ONNX packs + ORT CPU EP):
+
+| Host | Workload | Production RTFx | Baseline RTFx | RTF reduction |
+|------|----------|-----------------|---------------|---------------|
+| **AMD EPYC 9V74** (8 vCPU) | Full-file primary (medium_15s + long_30s) | **~54×** | **~26×** | **~52%** |
+| **Apple Silicon** (macOS) | ~28 min speech, chunked 30 s / 2 s overlap | **~30×** | **~21×** | **~30%** |
+
+Absolute RTF is host- and path-dependent; the **static pack stays faster** on both x86 server and Apple Silicon laptop CPUs. Quality gates pass on a small English eval set (EPYC freeze).
 
 > This is **standard ORT static quantization** applied carefully to the FastConformer encoder (QDQ MinMax; QOperator / Percentile failed on this graph) — not a new architecture. Contribution is the measured ladder, keep/discard gates, production freeze, and reproducible scripts.
 
@@ -24,8 +31,35 @@ via community INT8 ONNX + ONNX Runtime.
 | Quality (JFK abs WER) | **0.0** (exact norm match) | **0.0** (exact norm match) |
 | Pairwise vs Hub | exact **3/5** clips; mean WER ~0.09 (looped synth tails differ) | reference |
 
-\*Primary = geo-mean of mean RTF on `medium_15s` + `long_30s` (remeasured in quality assessment).  
+\*Primary = geo-mean of mean RTF on `medium_15s` + `long_30s` (remeasured in quality assessment on **AMD EPYC 9V74**).  
 Freeze decision + full tables: [`reports/production_default.md`](reports/production_default.md), [`results/quality_baseline_vs_best.md`](results/quality_baseline_vs_best.md).
+
+### Cross-platform check (Apple Silicon)
+
+Same production vs baseline packs on **macOS Apple Silicon**, long-form audio with app-level chunking (required to avoid full-file OOM):
+
+| | **Production** (`configs/production.json`) | **Baseline** (`configs/baseline.json`) |
+|--|-------------------------------------------|----------------------------------------|
+| Audio | `A_Time_for_Choosing.wav` (~27.8 min / ~1671 s) | same |
+| Chunking | `--chunk-window-s 30 --chunk-overlap-s 2` | same |
+| Threads | `intra=8` `inter=1` `CPUExecutionProvider` | same |
+| Protocol | `--benchmark` (warmup + 3 timed runs) | same |
+| **latency_mean_s** | **56.071** | **79.480** |
+| **RTF** | **0.033564** | **0.047576** |
+| **RTFx** | **~29.8×** | **~21.0×** |
+| **vs baseline** | **~29.5% lower RTF** (~1.42× faster) | reference |
+| Timed latencies (s) | 59.50, 54.68, 54.03 | 79.64, 80.80, 77.99 |
+
+Reproduce:
+
+```bash
+python scripts/apply_best_config.py --config configs/production.json \
+  --audio /path/to/long.wav --chunk-window-s 30 --benchmark
+python scripts/apply_best_config.py --config configs/baseline.json \
+  --audio /path/to/long.wav --chunk-window-s 30 --benchmark
+```
+
+**Note:** this is **not** the frozen EPYC primary metric (full-file short/medium clips). Chunking + different CPU change absolute RTFx; the point is the **static encoder still wins** outside the original host.
 
 ### How to run production
 
@@ -84,18 +118,25 @@ python scripts/quality_baseline_vs_best.py --warmup 1 --repeats 3
 ### Caveats
 
 - Eval set is **small** and mostly the same English JFK phrase (looped 5/15/30 s + natural clip) — **not** a full multilingual WER suite.
-- Speed numbers are **host-specific** (AMD EPYC 9V74, 8 vCPU, ORT 1.27 CPU).
+- **Absolute** RTF/RTFx are host- and path-specific (EPYC full-file vs Apple Silicon chunked long audio differ). **Relative** static-vs-dynamic gain held on both hosts measured so far.
 - Technique is **standard ORT static quant**, not a new architecture; Hub still ships dynamic INT8 by default.
 - **Long audio OOM:** full-file path is not safe for multi-minute files — use `--chunk-window-s` (see above).
 
-## Host used for published numbers
+## Hosts used for published numbers
+
+### Primary freeze host (AMD EPYC 9V74)
 
 - AMD EPYC 9V74, 8 vCPU, AVX-512 + VNNI + BF16
 - ~63 GB RAM, **no GPU**
 - ONNX Runtime 1.27.0 CPU EP, `onnx-asr` 0.11.0
-- Peak RSS ~1.5 GB (INT8)
+- Peak RSS ~1.5 GB (INT8) on short/medium clips
+- Headline: Hub dynamic INT8 ~**26×** real-time on 30 s; **production static encoder ~54×** (primary RTF ~0.018). Encoder ≈ **98%** of stage time.
 
-Headline: Hub dynamic INT8 ~**26×** real-time on 30 s; **production static encoder ~54×** (primary RTF ~0.018). Encoder ≈ **98%** of stage time.
+### Portability check (Apple Silicon, macOS)
+
+- User-reported **Apple Silicon** laptop, ORT CPU EP, same production/baseline packs
+- Workload: ~28 min English speech, **chunked** 30 s window / 2 s overlap, `intra=8`
+- Production **~29.8×** vs baseline **~21.0×** (~**30%** lower RTF) — see [Cross-platform check](#cross-platform-check-apple-silicon)
 
 Full analysis: [`reports/parakeet_tdt_v3_cpu_optimization.md`](reports/parakeet_tdt_v3_cpu_optimization.md) · Production freeze: [`reports/production_default.md`](reports/production_default.md)
 
