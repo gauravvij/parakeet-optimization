@@ -1,14 +1,16 @@
 ![Header: CPU ASR optimization case study](assets/header.png)
 
-# I used Neo + Grok 4.5 to optimize Parakeet on CPU (and mostly got out of the way)
+# The knobs did almost nothing. The encoder did everything.
 
 **Companion technical record:** [parakeet-cpu-optimization-case-study.md](parakeet-cpu-optimization-case-study.md)  
 **Repo:** [gauravvij/parakeet-optimization](https://github.com/gauravvij/parakeet-optimization)  
 **Production pack:** [gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc](https://huggingface.co/gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc)
 
-This is the personal version. The other post is the lab notebook: metrics, ladders, dead ends, replicate commands. This one is about **how I actually ran the work** with Neo in VS Code and **Grok 4.5** as the model through BYOK, what I said, what Neo did without me micromanaging, and where I still had to step in as a human.
+I set out to make NVIDIA **Parakeet TDT 0.6B v3** faster on CPU. The surprise was not a clever thread flag. Runtime tuning barely moved the needle. Static quant on the encoder cut primary RTF roughly in half on EPYC, and still won on my Mac.
 
-If you only want numbers, read the technical post. If you want to know whether this style of agent workflow is real for multi-day ML optimization, stay here.
+This is the personal version of that story. The other post is the lab notebook: metrics, ladders, dead ends, replicate commands. This one is about how I ran the work with **Neo** in VS Code and **Grok 4.5** via BYOK: what I asked for, what the agent owned, and where I still had to step in as a human.
+
+If you only want numbers, read the technical post. If you want the decision trail and the agent workflow behind a real freeze-and-publish loop, stay here.
 
 ---
 
