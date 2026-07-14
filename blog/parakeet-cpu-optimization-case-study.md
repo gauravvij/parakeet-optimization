@@ -1,6 +1,6 @@
 ![Header: CPU ASR optimization case study](assets/header.png)
 
-# Making Parakeet TDT 0.6B v3 faster on CPU: a measured optimization case study
+# Making Parakeet faster on CPU
 
 **Repo:** [gauravvij/parakeet-optimization](https://github.com/gauravvij/parakeet-optimization)  
 **Production weights:** [gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc](https://huggingface.co/gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc)  

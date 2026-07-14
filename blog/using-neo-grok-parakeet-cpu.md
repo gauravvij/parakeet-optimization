@@ -1,6 +1,6 @@
 ![Header: CPU ASR optimization case study](assets/header.png)
 
-# The knobs did almost nothing. The encoder did everything.
+# Making speech-to-text faster on CPU
 
 **Companion technical record:** [parakeet-cpu-optimization-case-study.md](parakeet-cpu-optimization-case-study.md)  
 **Repo:** [gauravvij/parakeet-optimization](https://github.com/gauravvij/parakeet-optimization)  
