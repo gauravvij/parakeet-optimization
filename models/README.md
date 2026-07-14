@@ -2,7 +2,12 @@
 
 ONNX weights are **gitignored** (~640MB–850MB per pack). Download them after clone.
 
-## Required for production inference
+| Goal | Packs needed |
+|------|----------------|
+| Production inference only | Static QDQ pack below |
+| A/B speed, quality assessment, baseline config | **Both** static QDQ + Hub dynamic INT8 |
+
+## 1. Production (static QDQ) — required for default configs
 
 **Static QDQ per-channel encoder pack** (frozen production default):
 
@@ -31,7 +36,10 @@ Files expected:
 - `encoder-model.int8.onnx` + `encoder-model.int8.onnx.data` (static QDQ encoder)
 - `decoder_joint-model.int8.onnx`, `nemo128.onnx`, `vocab.txt`, `config.json`
 
-## Hub dynamic INT8 (A/B baseline)
+## 2. Hub dynamic INT8 — required to replicate evaluation / A/B
+
+Needed for `configs/baseline.json`, `scripts/quality_baseline_vs_best.py`, and any
+production-vs-baseline RTF comparison (including long-audio chunked checks).
 
 | Item | Value |
 |------|--------|
@@ -44,6 +52,7 @@ source venv/bin/activate
 python - <<'PY'
 from pathlib import Path
 from huggingface_hub import hf_hub_download
+# Prefer explicit INT8 files (repo may also ship larger FP32 assets).
 repo = "istupakov/parakeet-tdt-0.6b-v3-onnx"
 local = Path("models/parakeet-tdt-0.6b-v3-onnx")
 local.mkdir(parents=True, exist_ok=True)
@@ -52,8 +61,12 @@ for f in [
     "encoder-model.int8.onnx", "decoder_joint-model.int8.onnx",
 ]:
     print(hf_hub_download(repo, f, local_dir=str(local)))
+print("OK", local)
 PY
 ```
+
+`snapshot_download("istupakov/parakeet-tdt-0.6b-v3-onnx", local_dir=...)` also works
+for the full Hub tree; the loop above is smaller and avoids accidental FP32 pulls.
 
 **Note:** `onnx-asr` globs like `encoder-model?int8.onnx` do not match Hub names
 `encoder-model.int8.onnx` — download explicitly as above.

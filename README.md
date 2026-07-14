@@ -109,11 +109,19 @@ python scripts/apply_best_config.py --config configs/baseline.json --benchmark
 
 ### How to reproduce quality assessment
 
+Compares **production vs Hub baseline** (RTF + transcripts + WER). You need **both** model packs on disk first (see [Download model weights](#download-model-weights)):
+
+1. `models/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc/` ← `gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc`
+2. `models/parakeet-tdt-0.6b-v3-onnx/` ← `istupakov/parakeet-tdt-0.6b-v3-onnx` (INT8 files)
+
 ```bash
 pip install -r requirements.txt   # includes jiwer
+# after both packs are downloaded:
 python scripts/quality_baseline_vs_best.py --warmup 1 --repeats 3
 # → results/quality_baseline_vs_best.json + .md
 ```
+
+Same requirement for any A/B run (`--config configs/baseline.json` vs production) and the Apple Silicon long-audio check above.
 
 ### Caveats
 
@@ -179,12 +187,16 @@ pip install -r requirements.txt
 
 Weights are **not** in git (~640MB+). See [`models/README.md`](models/README.md).
 
-**Production (static QDQ-pc encoder)** — required for default config:
+| Goal | Packs needed |
+|------|----------------|
+| Run production only | **Production** pack |
+| A/B speed check, quality assessment, cross-platform table | **Both** production + Hub baseline |
+
+**1. Production (static QDQ-pc encoder)** — required for default / freeze configs:
 
 ```bash
 source venv/bin/activate
 python - <<'PY'
-from pathlib import Path
 from huggingface_hub import snapshot_download
 snapshot_download(
     "gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc",
@@ -194,12 +206,14 @@ print("OK")
 PY
 ```
 
-**Hub dynamic INT8 (A/B baseline)** — optional:
+**2. Hub dynamic INT8 (A/B baseline)** — required to replicate evaluation / baseline config
+(`configs/baseline.json`, `scripts/quality_baseline_vs_best.py`):
 
 ```bash
 python - <<'PY'
 from pathlib import Path
 from huggingface_hub import hf_hub_download
+# Prefer explicit INT8 files (repo may also ship larger FP32 assets).
 repo = "istupakov/parakeet-tdt-0.6b-v3-onnx"
 local = Path("models/parakeet-tdt-0.6b-v3-onnx")
 local.mkdir(parents=True, exist_ok=True)
@@ -208,11 +222,14 @@ for f in [
     "encoder-model.int8.onnx", "decoder_joint-model.int8.onnx",
 ]:
     print(hf_hub_download(repo, f, local_dir=str(local)))
+print("OK", local)
 PY
 ```
 
+`snapshot_download("istupakov/parakeet-tdt-0.6b-v3-onnx", local_dir=...)` also works if you want the full Hub tree; the loop above is smaller and avoids accidental FP32 pulls.
+
 **Important:** `onnx-asr` globs like `encoder-model?int8.onnx` do not match Hub names
-`encoder-model.int8.onnx` — download explicitly as above.
+`encoder-model.int8.onnx` — download explicitly as above (or use a local dir that already has those filenames).
 
 Do **not** install full NeMo/CUDA stacks on disk-constrained hosts; INT8 ONNX is sufficient.
 
