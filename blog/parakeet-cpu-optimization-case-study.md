@@ -4,7 +4,8 @@
 
 **Repo:** [gauravvij/parakeet-optimization](https://github.com/gauravvij/parakeet-optimization)  
 **Production weights:** [gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc](https://huggingface.co/gvij/parakeet-tdt-0.6b-v3-onnx-static-qdq-pc)  
-**Baseline weights:** [istupakov/parakeet-tdt-0.6b-v3-onnx](https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx)
+**Baseline weights:** [istupakov/parakeet-tdt-0.6b-v3-onnx](https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx)  
+**Personal workflow write-up:** [using-neo-grok-parakeet-cpu.md](using-neo-grok-parakeet-cpu.md)
 
 This write-up is a technical record of how Neo (an autonomous AI engineering agent) took a high-level goal, built a CPU profiling and experiment harness around NVIDIA Parakeet TDT 0.6B v3 in ONNX, ran keep/discard ladders, froze a production config, and published code plus weights. The work was driven end to end inside Neo’s VS Code harness with **Grok 4.5 (xAI)** as the model via Neo’s Bring Your Own LLM Key (BYOK) path. That matters less as branding and more as a practical note: long multi-step ML research loops (profile → hypothesize → implement → gate → discard) are exactly where a strong reasoning model plus an agent that can write and run code pays off.
 
