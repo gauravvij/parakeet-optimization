@@ -6,6 +6,12 @@ Usage (from project root, venv active):
   python scripts/apply_best_config.py --audio data/real_speech.wav
   python scripts/apply_best_config.py --benchmark --warmup 1 --repeats 3
   python scripts/apply_best_config.py --config configs/baseline.json
+
+  # Multi-minute audio (bounds peak RAM; app-level chunk+concat, not streaming):
+  python scripts/apply_best_config.py --config configs/production.json \\
+    --audio long_talk.wav --chunk-window-s 30
+  python scripts/apply_best_config.py --audio long_talk.wav \\
+    --chunk-window-s 30 --chunk-overlap-s 2
 """
 
 from __future__ import annotations
@@ -185,6 +191,40 @@ def merge_transcripts(parts: list[str]) -> str:
     return out
 
 
+def resolve_chunking(cfg: dict[str, Any], args: argparse.Namespace) -> dict[str, Any] | None:
+    """Merge config chunking with CLI overrides.
+
+    Production configs leave chunking null (full-file path — best RTF on short clips).
+    For multi-minute audio, full-file encoder activations can OOM; use --chunk-window-s.
+    """
+    ch = cfg.get("chunking")
+    if isinstance(ch, dict):
+        out = dict(ch)
+    else:
+        out = {}
+
+    if args.no_chunk:
+        return None
+
+    if args.chunk_window_s is not None:
+        out["enabled"] = True
+        out["window_s"] = float(args.chunk_window_s)
+        if args.chunk_overlap_s is not None:
+            out["overlap_s"] = float(args.chunk_overlap_s)
+        else:
+            out.setdefault("overlap_s", 2.0)
+        return out
+
+    if args.chunk_overlap_s is not None and out.get("enabled"):
+        out["overlap_s"] = float(args.chunk_overlap_s)
+
+    if out.get("enabled"):
+        out.setdefault("window_s", 30.0)
+        out.setdefault("overlap_s", 2.0)
+        return out
+    return None
+
+
 def recognize_once(model, audio: Path, cfg: dict[str, Any]) -> str:
     ch = cfg.get("chunking")
     if ch and ch.get("enabled"):
@@ -194,12 +234,41 @@ def recognize_once(model, audio: Path, cfg: dict[str, Any]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description="Apply best_config.json for Parakeet CPU inference")
+    p = argparse.ArgumentParser(
+        description="Apply best_config.json for Parakeet CPU inference",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            "Long audio: full-file recognize loads the whole utterance into the encoder and can\n"
+            "OOM on multi-minute files (e.g. ~16GB+ then kill). Use --chunk-window-s 30 (or 15–60).\n"
+            "Chunking is app-level window+concat — not true streaming; may add boundary artifacts\n"
+            "and is not the frozen production RTF path."
+        ),
+    )
     p.add_argument("--config", type=str, default=str(DEFAULT_CONFIG))
     p.add_argument("--audio", type=str, default=str(DEFAULT_AUDIO))
     p.add_argument("--benchmark", action="store_true", help="Time warmup+repeats and print RTF")
     p.add_argument("--warmup", type=int, default=1)
     p.add_argument("--repeats", type=int, default=3)
+    p.add_argument(
+        "--chunk-window-s",
+        type=float,
+        default=None,
+        metavar="SEC",
+        help="Enable app-level chunking with this window (seconds). "
+        "Use for multi-minute audio to bound peak RAM (e.g. 30).",
+    )
+    p.add_argument(
+        "--chunk-overlap-s",
+        type=float,
+        default=None,
+        metavar="SEC",
+        help="Chunk overlap in seconds (default 2.0 when --chunk-window-s is set).",
+    )
+    p.add_argument(
+        "--no-chunk",
+        action="store_true",
+        help="Force full-file recognize even if config enables chunking.",
+    )
     args = p.parse_args(argv)
 
     os.chdir(PROJECT_ROOT)
@@ -219,27 +288,40 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     cfg = load_config(cfg_path)
+    chunking = resolve_chunking(cfg, args)
+    # Effective runtime config (do not mutate frozen production JSON on disk)
+    run_cfg = dict(cfg)
+    run_cfg["chunking"] = chunking
+
     print(f"Config: {cfg_path}", flush=True)
     print(f"Audio:  {audio}", flush=True)
+    if chunking and chunking.get("enabled"):
+        print(
+            f"Chunking: window_s={chunking.get('window_s')} "
+            f"overlap_s={chunking.get('overlap_s')} (app-level; bounds peak RAM)",
+            flush=True,
+        )
+    else:
+        print("Chunking: off (full-file; multi-minute audio may OOM)", flush=True)
 
-    prev = apply_env(cfg.get("env") or {})
+    prev = apply_env(run_cfg.get("env") or {})
     try:
-        model, model_dir = load_model(cfg)
+        model, model_dir = load_model(run_cfg)
         print(f"Model:  {model_dir}", flush=True)
         print(
-            f"Threads intra={cfg.get('intra_op_num_threads')} inter={cfg.get('inter_op_num_threads')} "
-            f"provider={cfg.get('provider')}",
+            f"Threads intra={run_cfg.get('intra_op_num_threads')} inter={run_cfg.get('inter_op_num_threads')} "
+            f"provider={run_cfg.get('provider')}",
             flush=True,
         )
 
         if args.benchmark:
             for _ in range(args.warmup):
-                _ = recognize_once(model, audio, cfg)
+                _ = recognize_once(model, audio, run_cfg)
             lats: list[float] = []
             transcript = ""
             for _ in range(args.repeats):
                 t0 = time.perf_counter()
-                transcript = recognize_once(model, audio, cfg)
+                transcript = recognize_once(model, audio, run_cfg)
                 lats.append(time.perf_counter() - t0)
             dur = audio_duration_s(audio)
             mean_lat = statistics.mean(lats)
@@ -248,7 +330,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"latency_mean_s={mean_lat:.4f} rtf={rtf:.6f} rtfx={rtfx:.2f}", flush=True)
             print(f"latencies_s={lats}", flush=True)
         else:
-            transcript = recognize_once(model, audio, cfg)
+            transcript = recognize_once(model, audio, run_cfg)
 
         print("--- transcript ---", flush=True)
         print(transcript, flush=True)

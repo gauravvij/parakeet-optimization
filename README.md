@@ -38,6 +38,34 @@ python scripts/apply_best_config.py --benchmark --warmup 1 --repeats 3
 python scripts/apply_best_config.py --config configs/production.json
 ```
 
+### Long audio (multi-minute) — avoid OOM
+
+Default production is **full-file** `recognize`. Encoder activations scale with duration; multi-minute files (e.g. a ~30 min speech) can climb to **tens of GB RSS** and get killed. That is expected, not a bad config path.
+
+Use **app-level chunking** to bound peak RAM (window + overlap + transcript merge — **not** true streaming / encoder cache):
+
+```bash
+python scripts/apply_best_config.py \
+  --config configs/production.json \
+  --audio /path/to/long_talk.wav \
+  --chunk-window-s 30
+
+# tighter RAM / more boundaries:
+python scripts/apply_best_config.py --audio /path/to/long_talk.wav \
+  --chunk-window-s 15 --chunk-overlap-s 2
+
+# force full-file even if a config enables chunking:
+python scripts/apply_best_config.py --audio data/real_speech.wav --no-chunk
+```
+
+| Flag | Meaning |
+|------|---------|
+| `--chunk-window-s SEC` | Enable chunking with this window (try **15–60**; start at **30**) |
+| `--chunk-overlap-s SEC` | Overlap for stitch (default **2** when window is set) |
+| `--no-chunk` | Full-file path (default for frozen production JSON) |
+
+**Tradeoffs:** lower peak memory; may add boundary artifacts; RTF can be worse than full-file on short clips (E5 ladder did not keep chunking for speed). Frozen production RTF numbers assume full-file short/medium clips.
+
 ### How to run Hub baseline (A/B)
 
 ```bash
@@ -58,6 +86,7 @@ python scripts/quality_baseline_vs_best.py --warmup 1 --repeats 3
 - Eval set is **small** and mostly the same English JFK phrase (looped 5/15/30 s + natural clip) — **not** a full multilingual WER suite.
 - Speed numbers are **host-specific** (AMD EPYC 9V74, 8 vCPU, ORT 1.27 CPU).
 - Technique is **standard ORT static quant**, not a new architecture; Hub still ships dynamic INT8 by default.
+- **Long audio OOM:** full-file path is not safe for multi-minute files — use `--chunk-window-s` (see above).
 
 ## Host used for published numbers
 
@@ -155,9 +184,15 @@ python scripts/apply_best_config.py --config configs/production.json --audio dat
 
 # A/B vs Hub dynamic INT8
 python scripts/apply_best_config.py --config configs/baseline.json --audio data/real_speech.wav --benchmark
+
+# Multi-minute files (bounds peak RAM; not the frozen RTF path)
+python scripts/apply_best_config.py --config configs/production.json \
+  --audio /path/to/long_talk.wav --chunk-window-s 30
 ```
 
 **Note:** shell `time python scripts/apply_best_config.py ...` includes **model load** (~1.5–2s). Production can look similar or slower on short one-shot runs; warm RTF (via `--benchmark`) is the metric optimized here.
+
+**Long audio:** without `--chunk-window-s`, the whole file is encoded in one shot and multi-minute audio can OOM. See [Long audio](#long-audio-multi-minute--avoid-oom).
 
 ### Sample audio
 

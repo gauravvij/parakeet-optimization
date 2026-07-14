@@ -95,6 +95,9 @@ python scripts/quality_baseline_vs_best.py --warmup 1 --repeats 3
 3. **Technique is standard ORT static quant (QDQ MinMax per-channel)** applied to the public FP32 encoder — not a novel architecture. Hub default remains dynamic INT8.
 4. Runtime-only knobs (E0–E6) did not clear ≥5%; encoder static quant (C2) is the kept win.
 5. Do **not** re-run full C0–C3 unless re-exporting; production pack is already on disk.
+6. **Long audio / memory:** frozen production leaves `"chunking": null` (full-file `recognize`). Multi-minute files can OOM as encoder activations scale with duration. For long talks use CLI chunking, e.g.  
+   `python scripts/apply_best_config.py --config configs/production.json --audio long.wav --chunk-window-s 30`  
+   That is app-level window+concat (not true streaming) and is **not** the frozen primary-RTF path.
 
 ## Related artifacts
 
