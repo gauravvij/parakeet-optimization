@@ -22,9 +22,14 @@ pipeline_tag: automatic-speech-recognition
 
 # Parakeet TDT 0.6B v3 — Static QDQ Per-Channel Encoder (ONNX INT8)
 
+[![Made using NEO](https://img.shields.io/badge/Made%20using-NEO-0A0A0A?style=for-the-badge&labelColor=111111&color=00E5C0)](https://heyneo.com)
+
+**[Made using NEO](https://heyneo.com)**  
+Autonomous AI Engineering Agent
+
 CPU-optimized ONNX pack for [`nvidia/parakeet-tdt-0.6b-v3`](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) with a **static QDQ MinMax per-channel INT8 encoder**. Decoder/joint and frontend stay as Hub dynamic INT8.
 
-This is **standard ONNX Runtime static quantization** applied carefully to the FastConformer encoder — not a new architecture. The contribution is a measured keep/discard ladder, quality gates, and a frozen production pack.
+This is **standard ONNX Runtime static quantization** applied carefully to the FastConformer encoder — not a new architecture. The contribution is a measured keep/discard ladder, quality gates, and a frozen production pack. Optimization and packaging were driven with [Neo](https://heyneo.com).
 
 | Item | Value |
 |------|--------|
